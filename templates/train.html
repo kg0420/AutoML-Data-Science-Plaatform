@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+<title>EDA</title>
+</head>
+
+<body>
+
+<h2>Dataset Preview</h2>
+
+{% for table in tables %}
+{{ table|safe }}
+{% endfor %}
+
+<h3>Dataset Info</h3>
+
+<p>Rows: {{summary.rows}}</p>
+<p>Columns: {{summary.columns}}</p>
+
+<form action="/train" method="post">
+
+<input type="text" name="target" placeholder="Enter target column name">
+
+<button type="submit">Train Model</button>
+
+</form>
+
+</body>
+</html>

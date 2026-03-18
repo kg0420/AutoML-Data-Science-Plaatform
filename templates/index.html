@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Auto Data Science Platform</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<!-- NAVBAR -->
+<nav class="bg-blue-600 p-4 shadow-md">
+<div class="container mx-auto flex justify-between items-center">
+
+<h1 class="text-white text-2xl font-bold">
+Auto Data Science Platform
+</h1>
+
+<p class="text-white text-sm">
+Upload Dataset • Train Models • Predict
+</p>
+
+</div>
+</nav>
+
+
+<!-- MAIN CONTAINER -->
+<div class="container mx-auto mt-10 px-6">
+
+<!-- HEADER -->
+<div class="mb-10">
+<h2 class="text-3xl font-bold text-gray-800">
+Build Machine Learning Models Automatically
+</h2>
+
+<p class="text-gray-600 mt-2">
+Upload your dataset and let the platform perform EDA, train models, and generate predictions automatically.
+</p>
+</div>
+
+
+
+<!-- GRID -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+<!-- UPLOAD DATASET CARD -->
+<div class="bg-white p-6 rounded-xl shadow-md">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+Upload Dataset
+</h3>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+
+<input 
+type="file"
+name="dataset"
+class="w-full border border-gray-500 rounded-lg p-2 mb-4"
+/>
+
+<button 
+type="submit"
+class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+
+Upload Dataset
+
+</button>
+
+</form>
+
+</div>
+
+
+
+<!-- TRAIN MODEL CARD -->
+<div class="bg-white p-6 rounded-xl shadow-md">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+Train Machine Learning Models
+</h3>
+
+<form action="/train" method="post">
+
+<input 
+type="text"
+name="target"
+placeholder="Enter Target Column"
+class="w-full border border-gray-300 rounded-lg p-2 mb-4"
+/>
+
+<button 
+type="submit"
+class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+
+Train Models
+
+</button>
+
+</form>
+
+</div>
+
+
+<!-- AUTOML CARD -->
+<div class="bg-white p-6 rounded-xl shadow-md">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+AutoML Training
+</h3>
+
+<p class="text-gray-600 mb-4">
+Automatically train multiple models and select the best one.
+</p>
+
+<form action="/automl" method="post">
+
+<button 
+type="submit"
+class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+
+Run AutoML
+
+</button>
+
+</form>
+
+</div>
+
+
+
+<!-- DOWNLOAD MODEL -->
+<div class="bg-white p-6 rounded-xl shadow-md">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+Download Best Model
+</h3>
+
+<p class="text-gray-600 mb-4">
+Download the trained machine learning model.
+</p>
+
+<a href="/download_model">
+
+<button 
+class="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition">
+
+Download Model
+
+</button>
+
+</a>
+
+</div>
+
+
+</div>
+
+
+<a href="/explore">
+<button class="bg-purple-500 text-white px-4 py-2 rounded mt-[10px]">
+Explore Dataset
+</button>
+</a>
+
+<!-- FEATURES SECTION -->
+<div class="mt-16">
+
+<h2 class="text-2xl font-bold text-gray-800 mb-6">
+Platform Features
+</h2>
+
+<div class="grid md:grid-cols-4 gap-6">
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<p class="text-xl">📊</p>
+<p class="font-semibold">Automatic EDA</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<p class="text-xl">🤖</p>
+<p class="font-semibold">Multiple ML Models</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<p class="text-xl">🧠</p>
+<p class="font-semibold">AutoML</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow text-center">
+<p class="text-xl">📈</p>
+<p class="font-semibold">Visualization Dashboard</p>
+</div>
+
+</div>
+
+</div>
+<div class="grid grid-cols-3 gap-6 mt-10">
+
+<div class="bg-white p-6 rounded-xl shadow">
+<h3 class="text-lg font-semibold">📊 Automatic EDA</h3>
+<p>Visualize dataset automatically</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow">
+<h3 class="text-lg font-semibold">🤖 Model Leaderboard</h3>
+<p>Compare multiple ML models</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow">
+<h3 class="text-lg font-semibold">🧠 AutoML</h3>
+<p>Select best model automatically</p>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+
+
+</div>
+<footer class="flex mt-16 bg-gray-800 text-white h-[60px] text-center justify-center align-items-center">
+
+<p class="my-auto">
+Built by Krish Gupta • Machine Learning Platform
+</p>
+
+</footer>
+</body>
+</html>
