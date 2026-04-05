@@ -1,34 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-10">
+<body class="bg-[#020617] text-white p-10 overflow-x-hidden">
 
-<h1 class="text-2xl font-bold mb-6">
-🔮 Make Prediction
+<!-- 🌌 BACKGROUND GLOW -->
+<div class="fixed w-[400px] h-[400px] bg-green-400 opacity-20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse"></div>
+<div class="fixed w-[400px] h-[400px] bg-purple-500 opacity-20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse"></div>
+
+<!-- HEADER -->
+<h1 class="text-4xl font-bold mb-8 bg-gradient-to-r from-green-400 to-purple-500 text-transparent bg-clip-text text-center">
+    🔮 Make Prediction
 </h1>
 
-<form action="/result" method="post" class="grid grid-cols-2 gap-4">
+<!-- RESULT -->
+{% if show_prediction %}
+<div class="mb-8 text-center card">
+    <h2 class="text-2xl font-bold text-green-400">
+        Prediction: {{ prediction }}
+    </h2>
+</div>
+{% endif %}
 
-{% for feature in features %}
+<!-- FORM -->
+<form action="/predict_result" method="post" class="grid md:grid-cols-2 gap-6">
 
-<input
-type="number"
-step="any"
-name="{{feature}}"
-placeholder="{{feature}}"
-class="border p-2 rounded"
-/>
+    {% for feature in features %}
+    <div class="card">
 
-{% endfor %}
+        <label class="block text-sm font-semibold mb-2 text-gray-300">
+            {{feature}}
+        </label>
 
-<button class="col-span-2 bg-green-500 text-white p-3 rounded">
-Predict
-</button>
+        <input type="number" step="any" name="{{feature}}" placeholder="Enter {{feature}}"
+            class="input focus:ring-2 focus:ring-green-400" />
+
+    </div>
+    {% endfor %}
+
+    <!-- BUTTON -->
+    <div class="md:col-span-2">
+        <button class="btn-green">
+            Predict
+        </button>
+    </div>
 
 </form>
+
+<!-- 🎨 STYLES -->
+<style>
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 16px;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 20px rgba(0,255,150,0.2);
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background: #16a34a;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,150,0.3);
+}
+</style>
 
 </body>
 </html>
