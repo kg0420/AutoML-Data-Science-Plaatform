@@ -5,26 +5,104 @@
 <title>EDA</title>
 </head>
 
-<body>
+<body class="bg-[#020617] text-white p-8 overflow-x-hidden">
 
-<h2>Dataset Preview</h2>
+<!-- 🌌 BACKGROUND -->
+<div class="fixed w-[400px] h-[400px] bg-green-400 opacity-20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse"></div>
+<div class="fixed w-[400px] h-[400px] bg-purple-500 opacity-20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse"></div>
 
-{% for table in tables %}
-{{ table|safe }}
-{% endfor %}
+<!-- TITLE -->
+<h2 class="text-4xl font-bold mb-10 text-center bg-gradient-to-r from-green-400 to-purple-500 text-transparent bg-clip-text">
+    📊 Dataset Analysis Dashboard
+</h2>
 
-<h3>Dataset Info</h3>
+<!-- SUMMARY -->
+<div class="grid md:grid-cols-2 gap-6 mb-10">
 
-<p>Rows: {{summary.rows}}</p>
-<p>Columns: {{summary.columns}}</p>
+    <div class="card text-center">
+        <p class="text-gray-400">Rows</p>
+        <h3 class="text-3xl font-bold text-green-400">{{summary.rows}}</h3>
+    </div>
 
-<form action="/train" method="post">
+    <div class="card text-center">
+        <p class="text-gray-400">Columns</p>
+        <h3 class="text-3xl font-bold text-purple-400">{{summary.columns}}</h3>
+    </div>
 
-<input type="text" name="target" placeholder="Enter target column name">
+</div>
 
-<button type="submit">Train Model</button>
+<!-- DATASET PREVIEW -->
+<div class="card mb-10">
 
-</form>
+    <h3 class="text-xl mb-4">📋 Dataset Preview</h3>
+
+    <div class="overflow-x-auto border border-white/10 rounded-lg">
+
+        {% for table in tables %}
+        {{ table|safe }}
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- TRAIN MODEL -->
+<div class="card max-w-xl mx-auto">
+
+    <h3 class="text-xl mb-4">🤖 Train Model</h3>
+
+    <form action="/train" method="post" class="space-y-4">
+
+        <input type="text" name="target" placeholder="Enter target column name"
+            class="input" />
+
+        <button type="submit" class="btn-green">
+            Train Model
+        </button>
+
+    </form>
+
+</div>
+
+<!-- 🎨 STYLES -->
+<style>
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 25px rgba(0,255,150,0.2);
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: #16a34a;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,150,0.3);
+}
+</style>
 
 </body>
 </html>
