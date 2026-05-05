@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,make_response
+from flask import Flask, jsonify, render_template, request,make_response
 import pandas as pd
 import os
 from werkzeug.utils import secure_filename
@@ -41,7 +41,10 @@ df = None
 
 def clean_data(df):
 
-    df = df.drop_duplicates()
+    df = df.drop_duplicates().copy()
+
+    # 🔥 REMOVE USELESS COLUMN
+    df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
 
     for col in df.columns:
 
@@ -55,25 +58,30 @@ def clean_data(df):
             df[col] = df[col].str.replace("₹", "", regex=True)
             df[col] = df[col].str.strip()
 
+            # ✅ FIXED numeric conversion
             try:
                 df[col] = pd.to_numeric(df[col])
             except:
                 pass
 
-    # Fill missing values
+    # 🔥 FILL MISSING VALUES SAFELY
     for col in df.columns:
 
         if df[col].dtype == "object":
 
-            df[col].fillna(df[col].mode()[0], inplace=True)
+            if df[col].mode().empty:
+                df[col] = df[col].fillna("Unknown")
+            else:
+                df[col] = df[col].fillna(df[col].mode()[0])
 
         else:
 
-            df[col].fillna(df[col].median(), inplace=True)
+            if df[col].dropna().empty:
+                df[col] = df[col].fillna(0)
+            else:
+                df[col] = df[col].fillna(df[col].median())
 
     return df
-
-
 # ===============================
 # EDA GRAPHS
 # ===============================
@@ -83,13 +91,17 @@ def generate_graphs(df):
     graphs = []
     df = df.sample(min(len(df), 5000))
     # Correlation heatmap
-    plt.figure(figsize=(8,6))
-    sns.heatmap(df.corr(numeric_only=True), cmap="coolwarm")
-    heatmap_path = "static/heatmap.png"
-    plt.title("Heat Map")
-    plt.savefig(heatmap_path)
-    plt.close()
-    graphs.append(heatmap_path)
+    corr = df.corr(numeric_only=True)
+
+    if corr.empty:
+        print("⚠️ No numeric data for heatmap")
+    else:
+        plt.figure(figsize=(8,6))
+        sns.heatmap(corr, cmap="coolwarm")
+        heatmap_path="static/heatmap.png"
+        plt.savefig(heatmap_path)
+        plt.close()
+        graphs.append(heatmap_path)
 
     # Plotly histogram (interactive)
     numeric_df = df.select_dtypes(include=['number'])
@@ -205,15 +217,17 @@ def train():
     y = df_clean[target]
 
     X = pd.get_dummies(X, drop_first=True)
-    columns = df_clean.columns.tolist()
+    columns = X.columns.tolist()
 
+    if X.shape[1] == 0:
+        return "❌ No usable features after preprocessing"
     if y.dtype == "object":
         y = y.astype("category").cat.codes
 
-    X = X.select_dtypes(include=["number"])
+    # X = X.select_dtypes(include=["number"])
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42,stratify=y   
+        X, y, test_size=0.2, random_state=42,stratify=y if y.nunique() > 1 else None
     )
 
     # ===============================
@@ -611,9 +625,86 @@ def generate_plot():
 
     except Exception as e:
         return f"<p style='color:red'>Error: {str(e)}</p>"
-# ===============================
-# RUN APP
-# ===============================
+    
+@app.route("/dashboard")
+def dashboard():
+    global df
+    if df is None:
+        return "Upload dataset first"
+    return render_template("dashboard.html", columns=df.columns)
+
+
+@app.route("/dashboard_data", methods=["POST"])
+def dashboard_data():
+
+    global df
+
+    data = request.get_json()
+    col = data.get("column")
+    val = data.get("value")
+
+    df_clean = clean_data(df.copy())
+
+    # Remove unwanted column
+    df_clean = df_clean.loc[:, ~df_clean.columns.str.contains("^Unnamed")]
+
+    # Apply filter
+    if col and val:
+        df_clean = df_clean[
+            df_clean[col].astype(str).str.contains(val, case=False, na=False)
+        ]
+
+    if df_clean.empty:
+        return jsonify({"error": "No data found for selected filter"})
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import os
+
+    # Select numeric columns
+    numeric_cols = df_clean.select_dtypes(include=['int64', 'float64']).columns
+
+    if len(numeric_cols) < 2:
+        return jsonify({"error": "Not enough numeric columns"})
+
+    x = numeric_cols[0]
+    y = numeric_cols[1]
+
+    # 🔥 CREATE STATIC GRAPHS
+    os.makedirs("static", exist_ok=True)
+
+    # Scatter
+    plt.figure()
+    sns.scatterplot(x=df_clean[x], y=df_clean[y])
+    plt.title("Scatter Plot")
+    scatter_path = "static/scatter.png"
+    plt.savefig(scatter_path)
+    plt.close()
+
+    # Bar
+    plt.figure()
+    sns.barplot(x=df_clean[x], y=df_clean[y])
+    plt.title("Bar Plot")
+    bar_path = "static/bar.png"
+    plt.savefig(bar_path)
+    plt.close()
+
+    # Histogram
+    plt.figure()
+    sns.histplot(df_clean[x], kde=True)
+    plt.title("Histogram")
+    hist_path = "static/hist.png"
+    plt.savefig(hist_path)
+    plt.close()
+
+    insight = f"Dataset has {len(df_clean)} rows after filtering."
+
+    return jsonify({
+        "scatter": scatter_path,
+        "bar": bar_path,
+        "hist": hist_path,
+        "insight": insight
+    })
 
 if __name__ == "__main__":
 
