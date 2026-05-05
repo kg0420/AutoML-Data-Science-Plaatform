@@ -1,0 +1,104 @@
+
+{% extends "base.html"%}
+{% block title %}Dashboard{% endblock %}
+{% block content%}
+    <script>
+
+</script>
+
+
+<!-- 🌌 BACKGROUND GLOW -->
+<div class="fixed w-[400px] h-[400px] bg-green-400 opacity-20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse"></div>
+<div class="fixed w-[400px] h-[400px] bg-purple-500 opacity-20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-grow">
+
+    <!-- 🎛️ FILTER PANEL -->
+    <div class="card col-span-1 justify-center items-center gap-2 transition-transform align-middle">
+        <h3 class="text-xl mb-4">🎛️ Filters</h3>
+
+        <!-- Column Filter -->
+        <select id="filterColumn" class="w-full p-2 mb-3 text-black rounded-xl flex flex-col justify-center items-center">
+            {% for col in columns %}
+            <option value="{{col}}">{{col}}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Value -->
+        <!-- <input id="filterValue" placeholder="Enter value" class="w-full p-2 text-black mb-3"> -->
+
+        <button type="submit" onclick="updateDashboard()" class="ml-[10px] bg-blue-500 text-white p-2 rounded-xl hover:scale-105 cursor-pointer transition-transform">
+            Apply Filter
+        </button>
+    </div>
+
+    <!-- 📊 CHARTS -->
+    <div class="col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-screen">
+
+        <div class="card">
+            <h3>📈 Scatter Plot</h3>
+            <div id="chart1"></div>
+        </div>
+
+        <div class="card">
+            <h3>📊 Bar Chart</h3>
+            <div id="chart2"></div>
+        </div>
+
+        <div class="card">
+            <h3>📉 Histogram</h3>
+            <div id="chart3"></div>
+        </div>
+
+        <div class="card">
+            <h3>🧠 Insights</h3>
+            <div id="insights"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+window.onload = function () {
+    updateDashboard();
+};
+
+function updateDashboard() {
+    const column = document.getElementById("filterColumn").value;
+
+    fetch("/dashboard_data", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ column })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.error){
+            document.getElementById("insights").innerHTML =
+                "<p style='color:red'>" + data.error + "</p>";
+            return;
+        }
+
+        const t = new Date().getTime();
+
+        document.getElementById("chart1").innerHTML =
+            `<img src="${data.scatter}?t=${t}" class="w-full">`;
+
+        document.getElementById("chart2").innerHTML =
+            `<img src="${data.bar}?t=${t}" class="w-full">`;
+
+        document.getElementById("chart3").innerHTML =
+            `<img src="${data.hist}?t=${t}" class="w-full">`;
+
+        document.getElementById("insights").innerText = data.insight;
+    });
+}
+</script>
+</script>
+</body>
+</html>
+
+{% endblock %}
