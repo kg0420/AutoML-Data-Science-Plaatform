@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% extends "base.html"%}
+{% block title %}Make Prediction{% endblock %}
+{% block content%}
 
 <body class="bg-[#020617] text-white p-10 overflow-x-hidden">
 
@@ -35,6 +33,65 @@
             {{feature}}
         </label>
 
+        <input type="number" step="any" name="{{feature}}" placeholder="Enter {{feature}}"
+            class="input focus:ring-2 focus:ring-green-400" />
+
+    </div>
+    {% endfor %}
+
+    <!-- BUTTON -->
+    <div class="md:col-span-2">
+        <button class="btn-green">
+            Predict
+        </button>
+    </div>
+
+</form>
+
+<!-- 🎨 STYLES -->
+<style>
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 16px;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 20px rgba(0,255,150,0.2);
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background: #16a34a;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,150,0.3);
+}
+</style>
+
+</body>
+</html>
+
+{% endblock %}
         <input type="number" step="any" name="{{feature}}" placeholder="Enter {{feature}}"
             class="input focus:ring-2 focus:ring-green-400" />
 
