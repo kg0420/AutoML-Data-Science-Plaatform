@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}AutoML DataScience Platform{% endblock %}</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+
+<html>
+</head>
+<body class="bg-[#020617] text-white overflow-x-hidden ">
+    
+
+<!-- 🌌 BACKGROUND GLOW -->
+<div class="fixed w-[400px] h-[400px] bg-green-400 opacity-20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse"></div>
+<div class="fixed w-[400px] h-[400px] bg-purple-500 opacity-20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse"></div>
+
+<!-- NAVBAR -->
+<nav class="bg-white/10 backdrop-blur-lg border-b border-white/20 p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+
+        <h1 class="text-2xl font-bold tracking-wide">
+            🚀 Auto Data Science Platform
+        </h1>
+
+        <p class="text-gray-300 text-sm">
+            Upload Dataset • Train Models • Predict
+        </p>
+
+    </div>
+</nav>
+
+  <main class="">
+    {% block content %}{% endblock %}
+  </main>
+
+<footer class="mt-16 bg-white/10 backdrop-blur-lg text-center py-4 text-gray-400 sticky bottom-0">
+    Built by Krish Gupta ⚡ Machine Learning Platform
+</footer>
+</body>
+</html>
